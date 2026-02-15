@@ -39,6 +39,31 @@
             box-shadow: 8px 8px 0px rgba(0,0,0,0.1);
         }
 
+        .pixel-input {
+            border: 4px solid var(--pixel-dark);
+            padding: 8px;
+            font-family: 'VT323', monospace;
+            font-size: 20px;
+            outline: none;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .pixel-btn-action {
+            background: var(--pixel-blue);
+            border: 4px solid var(--pixel-dark);
+            color: white;
+            padding: 10px;
+            width: 100%;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px var(--pixel-dark);
+        }
+
+        .pixel-btn-action:active {
+            box-shadow: 0px 0px 0px var(--pixel-dark);
+            transform: translate(4px, 4px);
+        }
+
         /* Efek Percikan Klik */
         .click-spark {
             position: fixed;
@@ -74,7 +99,6 @@
             z-index: 5;
         }
 
-        /* Pita Vertikal Kotak */
         .gift-box::before {
             content: '';
             position: absolute;
@@ -87,7 +111,6 @@
             border-right: 4px solid var(--pixel-dark);
         }
 
-        /* Tutup Kotak */
         .gift-lid {
             width: 132px;
             height: 30px;
@@ -136,7 +159,6 @@
         .gift-bow::before { left: 0; transform: rotate(-15deg); }
         .gift-bow::after { right: 0; transform: rotate(15deg); }
 
-        /* Kelas Animasi Kado */
         .lid-open {
             animation: lidPop 0.8s steps(5) forwards;
         }
@@ -215,7 +237,6 @@
             100% { transform: translateX(-50%) scale(1.2); background: #fdcb6e; }
         }
 
-        /* Hati Pixel Melayang */
         .pixel-heart {
             position: fixed;
             pointer-events: none;
@@ -230,7 +251,6 @@
             100% { transform: translateY(-20vh) translateX(30px); opacity: 0; }
         }
 
-        /* Efek Munculnya Pesan */
         .message-fade-in {
             animation: fadeInUp 1.2s cubic-bezier(0.19, 1, 0.22, 1) forwards;
         }
@@ -244,10 +264,39 @@
 </head>
 <body>
 
+    <!-- Tahap 0: Lock Stage (Login) -->
+    <div id="lockStage" class="fixed inset-0 flex flex-col items-center justify-center bg-pink-200 z-[110] p-4 transition-all duration-700">
+        <div class="pixel-border p-6 md:p-10 text-center max-w-xs w-full bg-white">
+            <h2 class="pixel-font text-[10px] text-pink-500 mb-6 uppercase">Verify Identity</h2>
+            <p class="text-slate-500 mb-4 text-lg">Enter your birth date:</p>
+            
+            <div class="flex gap-2 mb-2">
+                <input type="number" id="inputDay" placeholder="Day (16)" class="pixel-input text-center" min="1" max="31">
+                <select id="inputMonth" class="pixel-input text-center">
+                    <option value="">Month</option>
+                    <option value="january">January</option>
+                    <option value="february">February</option>
+                    <option value="march">March</option>
+                    <option value="april">April</option>
+                    <option value="may">May</option>
+                    <option value="june">June</option>
+                    <option value="july">July</option>
+                    <option value="august">August</option>
+                    <option value="september">September</option>
+                    <option value="october">October</option>
+                    <option value="november">November</option>
+                    <option value="december">December</option>
+                </select>
+            </div>
+            
+            <button onclick="checkBirthday()" class="pixel-btn-action pixel-font text-[8px] uppercase mt-2">Unlock Surprise</button>
+            <p id="errorHint" class="mt-4 text-red-500 pixel-font text-[8px] opacity-0 transition-opacity">Wrong Date! Try again.</p>
+        </div>
+    </div>
+
     <!-- Tahap 1: Landing (Kotak Kado) -->
-    <div id="landing" class="fixed inset-0 flex flex-col items-center justify-center bg-sky-200 z-[100] transition-all duration-700 p-4">
+    <div id="landing" class="hidden fixed inset-0 flex flex-col items-center justify-center bg-sky-200 z-[100] transition-all duration-700 p-4">
         
-        <!-- Bunga di sekitar -->
         <div class="sunflower top-[10%] left-[5%] md:top-[15%] md:left-[10%]">🌻</div>
         <div class="sunflower bottom-[15%] right-[5%] md:bottom-[20%] md:right-[15%]">🌻</div>
         <div class="rose top-[20%] right-[8%] md:top-[25%] md:right-[12%]">🌹</div>
@@ -287,11 +336,11 @@
 
     <!-- Tahap 3: Pesan Utama -->
     <div id="messageStage" class="hidden fixed inset-0 flex flex-col items-center justify-start px-4 overflow-y-auto py-20 opacity-0">
-        <div class="pixel-border max-w-xl w-full p-6 md:p-12 bg-white relative my-10 h-auto">
+        <div class="pixel-border max-w-xl w-full p-6 md:p-12 bg-white relative my-10 h-auto text-center">
             <div class="absolute -top-12 left-1/2 -translate-x-1/2 text-6xl">🎂</div>
-            <h1 class="pixel-font text-lg md:text-xl text-blue-500 mb-8 text-center uppercase tracking-tighter">Happy Birthday, Love! ❤️</h1>
+            <h1 class="pixel-font text-lg md:text-xl text-blue-500 mb-8 uppercase tracking-tighter">Happy Birthday, Love! ❤️</h1>
             
-            <div id="fullMessage" class="text-xl md:text-3xl text-slate-700 tracking-wider uppercase leading-relaxed text-center break-words">
+            <div id="fullMessage" class="text-xl md:text-3xl text-slate-700 tracking-wider uppercase leading-relaxed break-words">
                 Selamat ulang tahun bebbz, maaf tak bisa ngasih kue nya langsung karna tudey aku ga liburrr. semoga kamu dikasih kelimpahan rezeki lagi, diberikan kesehatan, terus diberikan keberuntungan lebih banyak lagi di kehidupan kamu ya bebbb, Aamiin. semangat yaa semester terakhir kuliahnya inii, semoga skripsi lancar, dan dimudahkan lagi buat nyelesaiin kewajiban kamu kedepannya. love uu
             </div>
             
@@ -304,7 +353,6 @@
     </div>
 
     <script>
-        // Logika efek percikan saat klik
         window.addEventListener('mousedown', function(e) {
             const spark = document.createElement('div');
             spark.className = 'click-spark';
@@ -317,29 +365,47 @@
             }, 400);
         });
 
+        function checkBirthday() {
+            const day = document.getElementById('inputDay').value;
+            const month = document.getElementById('inputMonth').value;
+            const errorHint = document.getElementById('errorHint');
+            const lockStage = document.getElementById('lockStage');
+            const landing = document.getElementById('landing');
+
+            if (day === '16' && month === 'february') {
+                lockStage.style.opacity = '0';
+                setTimeout(() => {
+                    lockStage.classList.add('hidden');
+                    landing.classList.remove('hidden');
+                    // Reset opacity for landing because it might be 0 from transition
+                    landing.style.opacity = '1';
+                }, 700);
+            } else {
+                errorHint.style.opacity = '1';
+                setTimeout(() => { errorHint.style.opacity = '0'; }, 2000);
+            }
+        }
+
         function startCakeEvent() {
             const landing = document.getElementById('landing');
             const cakeStage = document.getElementById('cakeStage');
             const bow = document.getElementById('bowElement');
             const lid = document.getElementById('lidElement');
             
-            // Picu animasi buka kado
             bow.classList.add('bow-fly');
             lid.classList.add('lid-open');
 
-            // Tunggu animasi sebelum menyembunyikan landing
             setTimeout(() => {
                 landing.style.opacity = '0';
                 setTimeout(() => {
                     landing.classList.add('hidden');
                     cakeStage.classList.remove('hidden');
+                    cakeStage.style.opacity = '1';
                     
-                    // Tahapan konstruksi kue
                     setTimeout(() => { document.getElementById('l1').style.height = '60px'; }, 300);
                     setTimeout(() => { document.getElementById('l2').style.height = '50px'; }, 1100);
                     setTimeout(() => { document.getElementById('l3').style.height = '40px'; }, 1900);
                     
-                    // Lilin & Api
                     setTimeout(() => { document.getElementById('candle').style.height = '25px'; }, 2700);
                     setTimeout(() => { 
                         document.getElementById('flame').style.display = 'block';
